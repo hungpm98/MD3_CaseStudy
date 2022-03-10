@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +16,7 @@ class AuthController extends Controller
         $roles = DB::table('roles')->get();
         return view('backend.Auth.register',compact('roles'));
     }
-    public function register(Request $request){
+    public function register(RegisterRequest $request){
         // dd($request);
         $data = $request->only('name','email','password','role_id');
         $data['password'] = Hash::make($data['password']);
@@ -30,7 +32,7 @@ class AuthController extends Controller
 
 
     }
-    public function login(Request $request){
+    public function login(LoginRequest $request){
         $data = $request->only('email','password');
         if (Auth::attempt($data)){
             return redirect()->route('index');
